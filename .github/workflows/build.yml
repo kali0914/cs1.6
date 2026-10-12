@@ -1,0 +1,29 @@
+name: Build CS 1.6 Assets
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download CS 1.6 Assets
+        uses: Skippeh/steamfetch-action@v1
+        with:
+          dir: "./cs_assets/"
+          os: "linux"
+          app: 90
+          osarch: 32
+
+      - name: Package Assets
+        run: |
+          cd cs_assets
+          zip -r ../valve.zip ./cstrike ./valve
+
+      - name: Upload valve.zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: valve.zip
+          path: valve.zip
